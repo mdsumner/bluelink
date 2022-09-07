@@ -65,8 +65,57 @@ fs <- files |> dplyr::filter(date >= (max(date) - 5 * 24 * 3600))
 
 ## these are all the same file so we don't have to vectorize file to band
 r <- rast(fs$dsn, lyrs = fs$band)
-plot(crop(r, ext(135, 155, -50, -30)))
+ex <- c(135, 155, -50, -30)
+plot(crop(r, ext(ex)))
+
 ```
+
+The system is pretty templated, so we can sub in a different variable. 
+
+```{r sub}
+u <- gsub("ocean_temp", "ocean_u", fs$dsn)
+v <- gsub("ocean_temp", "ocean_v", fs$dsn)
+u1 <- crop(rast(u, lyrs = fs$band), ext(ex))
+v1 <- crop(rast(v, lyrs = fs$band), ext(ex))
+
+plot(sqrt(u1^2 + v1^2), col = hcl.colors(26))
+
+## the available vars generally come after "ocean_" but note there are others with a different pattern
+branvariables <-
+c("atm_flux_diag", "ice_force", "ocean_eta_t", "ocean_force",
+"ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
+"ocean_ty_trans_int_z", "ocean_u", "ocean_v", "ocean_w")
+
+
+```
+
+Go for depth. 
+
+```{r depth}
+zfiles <- tidyr::unnest(temp, cols = "bands") |> dplyr::filter(date == max(date))
+idx <- as.integer(seq(1, 51, length.out = 12))
+zfiles <- zfiles[idx, ]
+## w too
+u <- gsub("ocean_temp", "ocean_u", zfiles$dsn)
+v <- gsub("ocean_temp", "ocean_v", zfiles$dsn)
+#w <- vapour::vapour_vrt(, 
+#                        extent = c(0.05, 360.05, -74.95,  75.05))
+w <- gsub("ocean_temp", "ocean_w", zfiles$dsn)
+
+u1 <- crop(rast(u, lyrs = zfiles$band), ext(ex))
+v1 <- crop(rast(v, lyrs = zfiles$band), ext(ex))
+w1 <- rast(w, lyrs = zfiles$band)
+## w is offset to uv and temp because Arakawa-b
+set.ext(w1, ext(rast(u[1], lyrs = 1)))
+w1 <- crop(w1, ext(ex))
+
+plot(sqrt(u1^2 + v1^2 + w1^2), col = hcl.colors(26))
+
+#u1 <- vapour::vapour_warp_raster(zfiles$dsn[1], extent = ex, dimension = c(500, 500), bands = zfiles$band)
+
+```
+
+
 ## Code of Conduct
   
 Please note that the bluelink project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
