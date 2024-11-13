@@ -102,7 +102,7 @@ read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
   idx <- (intday-1) * 51 + depth
 
 
-  obj <- .generate_raster(x, varname = "ocean_mld")
+  obj <- .generate_raster(x, varname = varname)
   if (inherits(obj, "BasicRaster")) {
     stopifnot(raster::nlayers(obj) == lubridate::days_in_month(x[1]))
     out <- terra::rast(obj[[idx]] * 1)
