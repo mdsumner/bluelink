@@ -79,6 +79,24 @@ read_bluelink("2023-12-31", varname = "ocean_temp")
 Generally, take the year you are in and you should be able to get days
 from last year.
 
+## Try a time series
+
+Every day on the first of September
+
+``` r
+dts <- seq(as.Date("1993-10-10"), as.Date("2023-10-10"), by = "1 year")
+
+options(parallelly.fork.enable = TRUE, future.rng.onMisuse = "ignore")
+library(furrr); plan(multicore)
+#> Loading required package: future
+
+sst <- future_map_dbl(dts, \(.x) terra::extract(read_bluelink(.x, varname = "ocean_temp"), cbind(150, -42))[[1]])
+plan(sequential)
+plot(dts, sst)
+```
+
+<img src="man/figures/README-time-1.png" width="100%" />
+
 ## Code of Conduct
 
 Please note that the bluelink project is released with a [Contributor
