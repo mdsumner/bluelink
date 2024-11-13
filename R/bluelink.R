@@ -55,7 +55,7 @@
 #' Read Mixed Layer Depth
 #'
 #' @param x date or datetime object or string
-#'
+#' @param ... passed to [read_bluelink()]
 #' @return SpatRaster
 #' @export
 #'
@@ -64,14 +64,16 @@
 #' b <- read_mld("2023-12-31")
 #' ex <- terra::ext(14, 200, -70, -40)
 #' #terra::crop(a, ex) - terra::crop(b, ex)
-read_mld <- function(x, depth = 1L, ...) {
- read_bluelink(x, varname = "ocean_mld", depth = depth, ...)
+read_mld <- function(x,  ...) {
+ read_bluelink(x, varname = "ocean_mld", depth = 1L, ...)
 }
 
 
 #' Title
 #'
 #' The 'depth' argument is from 1 to 51.
+#' Time is 'days since 1979-01-01 00:00:00'
+#' See a representative ncdump output in examples, text saved in this package.
 #' @param x date or datetime object or string
 #' @param varname variable name one of "ocean_<s>" salt, temp, u, v, w  (being salt=salinity, temp=temperature, u,v,w= velocity components in x,y,z direction)
 #' @param depth depth level (there are 51, from the surface to the bottom) see Details
@@ -82,6 +84,11 @@ read_mld <- function(x, depth = 1L, ...) {
 #' @examples
 #' read_bluelink(varname = "ocean_w")
 #' read_bluelink("2023-01-05", "ocean_salt")
+#' if(interactive()) {
+#'  sfile <- "ncdump/atm_flux_diag_1993_01.nc.dump"
+#'  sfile1 <- system.file(sfile, package = "bluelink", mustWork = TRUE)
+#'  utils::browseURL(sfile1)
+#' }
 read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
                                      "ocean_u", "ocean_v", "ocean_w", "ocean_mld"), depth = 1L) {
   mindate <- as.Date("1993-01-01")
@@ -96,6 +103,8 @@ read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
 
   if (length(depth) < 1 || depth < 1 || depth > 51 || is.na(depth)) stop("only 51 depths available")
 
-  .generate_raster(x, varname = varname, band = band,  depth = depth)
+  out <- .generate_raster(x, varname = varname, band = band,  depth = depth)
+  terra::ext(out) <- terra::ext(round(as.vector(terra::ext(out))))
+  out
 }
 

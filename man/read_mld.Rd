@@ -4,10 +4,12 @@
 \alias{read_mld}
 \title{Read Mixed Layer Depth}
 \usage{
-read_mld(x)
+read_mld(x, ...)
 }
 \arguments{
 \item{x}{date or datetime object or string}
+
+\item{...}{passed to \code{\link[=read_bluelink]{read_bluelink()}}}
 }
 \value{
 SpatRaster

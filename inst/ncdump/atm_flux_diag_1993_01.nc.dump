@@ -1,0 +1,206 @@
+File https://thredds.nci.org.au/thredds/dodsC/gb6/BRAN/BRAN2020/daily/atm_flux_diag_1993_01.nc (NC_FORMAT_CLASSIC):
+
+     17 variables (excluding dimension variables):
+        double average_T1[Time]
+            long_name: Start time for average period
+            units: days since 1979-01-01 00:00:00
+            missing_value: 1e+20
+            _FillValue: 1e+20
+            _ChunkSizes: 1
+        double average_T2[Time]
+            long_name: End time for average period
+            units: days since 1979-01-01 00:00:00
+            missing_value: 1e+20
+            _FillValue: 1e+20
+            _ChunkSizes: 1
+        double average_DT[Time]
+            long_name: Length of average period
+            units: days
+            missing_value: 1e+20
+            _FillValue: 1e+20
+            _ChunkSizes: 1
+        float land_mask[lon,lat]
+            long_name: fractional amount of land
+            units: none
+            valid_range: -0.00999999977648258
+             valid_range: 1.00999999046326
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: point
+            interp_method: conserve_order1
+            _ChunkSizes: 300
+             _ChunkSizes: 300
+        float ice_mask[lon,lat,Time]
+            long_name: fractional amount of sea ice
+            units: none
+            valid_range: -0.00999999977648258
+             valid_range: 1.00999999046326
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            interp_method: conserve_order1
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float wind[lon,lat,Time]
+            long_name: wind speed for flux calculations
+            units: m/s
+            valid_range: 0
+             valid_range: 400
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float t_surf[lon,lat,Time]
+            long_name: surface temperature
+            units: deg_k
+            valid_range: 100
+             valid_range: 400
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float tau_x[lon,lat,Time]
+            long_name: zonal wind stress
+            units: pa
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float tau_y[lon,lat,Time]
+            long_name: meridional wind stress
+            units: pa
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float u_star[lon,lat,Time]
+            long_name: friction velocity
+            units: m/s
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float u_atm[lon,lat,Time]
+            long_name: u wind component at btm level
+            units: m/s
+            valid_range: -400
+             valid_range: 400
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float v_atm[lon,lat,Time]
+            long_name: v wind component at btm level
+            units: m/s
+            valid_range: -400
+             valid_range: 400
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float shflx[lon,lat,Time]
+            long_name: sensible heat flux
+            units: w/m2
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float lwflx[lon,lat,Time]
+            long_name: net (down-up) longwave flux
+            units: w/m2
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float rh_ref[lon,lat,Time]
+            long_name: relative humidity at 2 m
+            units: percent
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        float q_ref[lon,lat,Time]
+            long_name: specific humidity at 2 m
+            units: kg/kg
+            missing_value: -1
+            _FillValue: -1
+            cell_methods: time: mean
+            time_avg_info: average_T1,average_T2,average_DT
+            _ChunkSizes: 1
+             _ChunkSizes: 661
+             _ChunkSizes: 1586
+        double Time_bounds[nv,Time]
+            long_name: Time axis boundaries
+            units: days
+            missing_value: 1e+20
+            _FillValue: 1e+20
+            _ChunkSizes: 1
+             _ChunkSizes: 2
+
+     4 dimensions:
+        Time  Size:31   *** is unlimited ***
+            long_name: Time
+            units: days since 1979-01-01 00:00:00
+            cartesian_axis: T
+            calendar_type: GREGORIAN
+            calendar: GREGORIAN
+            bounds: Time_bounds
+            _ChunkSizes: 1
+        lat  Size:1500
+            long_name: latitude
+            units: degrees_N
+            cartesian_axis: Y
+            _ChunkSizes: 300
+        lon  Size:3600
+            long_name: longitude
+            units: degrees_E
+            cartesian_axis: X
+            _ChunkSizes: 300
+        nv  Size:2
+            long_name: vertex number
+            units: none
+            cartesian_axis: N
+            _ChunkSizes: 2
+
+    9 global attributes:
+        filename: atm_flux_diag_1993_01_01.nc
+        grid_type: regular
+        grid_tile: N/A
+        history: Mon May 18 20:34:53 2020: ncrcat -4 --dfl_lvl 1 --cnk_dmn Time,1 --cnk_dmn lon,300 --cnk_dmn lat,300 atm_flux_diag_1993_01_01.nc atm_flux_diag_1993_01_02.nc atm_flux_diag_1993_01_03.nc atm_flux_diag_1993_01_04.nc atm_flux_diag_1993_01_05.nc atm_flux_diag_1993_01_06.nc atm_flux_diag_1993_01_07.nc atm_flux_diag_1993_01_08.nc atm_flux_diag_1993_01_09.nc atm_flux_diag_1993_01_10.nc atm_flux_diag_1993_01_11.nc atm_flux_diag_1993_01_12.nc atm_flux_diag_1993_01_13.nc atm_flux_diag_1993_01_14.nc atm_flux_diag_1993_01_15.nc atm_flux_diag_1993_01_16.nc atm_flux_diag_1993_01_17.nc atm_flux_diag_1993_01_18.nc atm_flux_diag_1993_01_19.nc atm_flux_diag_1993_01_20.nc atm_flux_diag_1993_01_21.nc atm_flux_diag_1993_01_22.nc atm_flux_diag_1993_01_23.nc atm_flux_diag_1993_01_24.nc atm_flux_diag_1993_01_25.nc atm_flux_diag_1993_01_26.nc atm_flux_diag_1993_01_27.nc atm_flux_diag_1993_01_28.nc atm_flux_diag_1993_01_29.nc atm_flux_diag_1993_01_30.nc atm_flux_diag_1993_01_31.nc /g/data/gb6/BRAN/BRAN_junk/OFAM/atm_flux_diag_1993_01.nc
+        NCO: netCDF Operators version 4.9.2 (Homepage = http://nco.sf.net, Code = http://github.com/nco/nco)
+        catalogue_doi_url: http://dx.doi.org/10.25914/6009627c7af03
+        acknowledgement: BRAN is made freely available by CSIRO Bluelink and is supported by the Bluelink Partnership: a collaboration between the Australian Department of Defence, Bureau of Meteorology and CSIRO.
+        title: BRAN2020
+        DODS_EXTRA.Unlimited_Dimension: Time

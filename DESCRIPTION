@@ -1,14 +1,13 @@
 Package: bluelink
-Title: Get 'Bluelink ReANalysis' ('BRAN') model output
+Title: Get Ocean Model Output as Raster Objects from 'Bluelink ReANalysis' ('BRAN') 
 Version: 0.2.0
 Authors@R: 
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
-Description: Bluelink Reanalysis (BRAN2020) via NetCDF sources. Facilities to 
- query and read from BRAN2020, a 4 dimensional nearly-global ocean product.  
- The goal of BRAN is to provide a realistic quantitative description of the 
- three-dimensional time-varying ocean circulation of all physical variables 
- (temperature, salinity, sea-level and three components of velocity) for the last 
- few decades. <https://research.csiro.au/bluelink/global/reanalysis/>
+Description: Functions to obtain 'Bluelink Reanalysis' ('BRAN2020')  
+ a 4 dimensional nearly global ocean product.  The goal of 'BRAN' is to provide a realistic quantitative description of the 
+ three-dimensional time-varying ocean circulation of all physical variables for the last few 
+ decades including temperature, salinity, sea-level and three components of velocity. 
+ <https://research.csiro.au/bluelink/global/reanalysis/>
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: es
@@ -17,7 +16,6 @@ RoxygenNote: 7.3.2
 URL: https://github.com/mdsumner/bluelink
 BugReports: https://github.com/mdsumner/bluelink/issues
 Imports: 
-    lubridate,
     raster,
     terra
 Suggests: 
