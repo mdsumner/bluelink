@@ -27,7 +27,7 @@
 }
 
 .bluelink_dods <- function(x) {
-  sprintf("https://thredds.nci.org.au/dodsC/fileServer/gb6/BRAN/BRAN2020/%s", x)
+  sprintf("https://thredds.nci.org.au/thredds/dodsC/gb6/BRAN/BRAN2020/%s", x)
 }
 
 # c("ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",

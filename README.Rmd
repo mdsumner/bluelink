@@ -42,7 +42,8 @@ remotes::install_github("mdsumner/bluelink")
 
 This is a basic example which shows you how to read the earliest available for this variable. 
 
-```{r example}
+```{r example0}
+library(bluelink)
 read_bluelink(varname = "ocean_w")
 ```
 
@@ -54,7 +55,7 @@ read_bluelink(varname = "ocean_temp")
 
 We can give a particular date. 
 
-```{r example}
+```{r example2}
 read_bluelink("2023-12-31", varname = "ocean_temp")
 ```
 
