@@ -1,5 +1,5 @@
 Package: bluelink
-Title: Get Bluelink ReANalysis (BRAN)
+Title: Get 'Bluelink ReANalysis' ('BRAN') model output
 Version: 0.2.0
 Authors@R: 
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
@@ -22,5 +22,6 @@ Imports:
     terra
 Suggests: 
     curl,
+    ncdf4,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

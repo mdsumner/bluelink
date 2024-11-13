@@ -33,11 +33,15 @@
 # c("ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
 #   "ocean_u", "ocean_v", "ocean_w")
 
+.do_windows <- function(x) {
+  requireNamespace("ncdf4", quietly = TRUE);
+  raster::brick(.bluelink_dods(x))
+}
 .generate_raster <- function(x, varname) {
   bgn <- .bluelink_generator(x, varname = varname)
   switch(.Platform$OS.type,
     unix =   terra::rast(.bluelink_fileserver(bgn), vsi = TRUE),
-    windows = raster::brick(.bluelink_dods(bgn)), vsi = TRUE)
+    windows = .do_windows(bgn))
 
 }
 
