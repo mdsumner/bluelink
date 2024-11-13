@@ -37,7 +37,7 @@
   bgn <- .bluelink_generator(x, varname = varname)
   switch(.Platform$OS.type,
     unix =   terra::rast(.bluelink_fileserver(bgn), vsi = TRUE),
-    windows = terra::rast(raster::brick(.bluelink_dods(bgn)), vsi = TRUE))
+    windows = raster::brick(.bluelink_dods(bgn)), vsi = TRUE)
 
 }
 
@@ -61,10 +61,16 @@ read_mld <- function(x) {
 
 
   obj <- .generate_raster(x, varname = "ocean_mld")
-  ## check here
-  stopifnot(terra::nlyr(obj) == lubridate::days_in_month(x[1]))
-  obj[[as.integer(format(x, "%d"))]]
+  if (inherits(obj, "BasicRaster")) {
+    stopifnot(raster::nlayers(obj) == lubridate::days_in_month(x[1]))
+    out <- terra::rast(obj[[as.integer(format(x, "%d"))]])
+  } else {
+    ## check here
+    stopifnot(terra::nlyr(obj) == lubridate::days_in_month(x[1]))
+    out <- obj[[as.integer(format(x, "%d"))]]
+  }
 
+  out
 }
 
 
@@ -90,10 +96,21 @@ read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
   depth <- depth[1L]
   if (length(depth) < 1 || depth < 1 || depth > 51 || is.na(depth)) stop("only 51 depths available")
   varname <- match.arg(varname)
-  obj <- .generate_raster(x, varname = varname)
 
-  stopifnot(terra::nlyr(obj) == (lubridate::days_in_month(x[1]) * 51))
   intday <- as.integer(format(x, "%d"))
-  obj[[(intday-1) * 51 + depth ]]
+  idx <- (intday-1) * 51 + depth
+
+
+  obj <- .generate_raster(x, varname = "ocean_mld")
+  if (inherits(obj, "BasicRaster")) {
+    stopifnot(raster::nlayers(obj) == lubridate::days_in_month(x[1]))
+    out <- terra::rast(obj[[idx]])
+  } else {
+    ## check here
+    stopifnot(terra::nlyr(obj) == lubridate::days_in_month(x[1]))
+    out <- obj[[idx]]
+  }
+
+  out
 }
 
