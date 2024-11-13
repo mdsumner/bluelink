@@ -36,7 +36,7 @@
 .do_raster <- function(x, band,  depth) {
   requireNamespace("ncdf4", quietly = TRUE);
   out <- terra::rast(raster::raster(.bluelink_dods(x), band = band, level = depth) * 1)
-  raster::projection(out) <- "EPSG:4326"
+  terra::set.crs(out) <- "EPSG:4326"
   out
 }
 .do_terra <- function(x, band, depth) {
