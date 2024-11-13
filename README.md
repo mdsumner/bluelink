@@ -40,7 +40,7 @@ read_bluelink(varname = "ocean_w")
 #> class       : SpatRaster 
 #> dimensions  : 1500, 3600, 1  (nrow, ncol, nlyr)
 #> resolution  : 0.1, 0.1  (x, y)
-#> extent      : -9.507305e-10, 360, -75, 75  (xmin, xmax, ymin, ymax)
+#> extent      : 0, 360, -75, 75  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=longlat +datum=WGS84 +no_defs 
 #> source      : ocean_w_1998_01.nc:w 
 #> varname     : w (dia-surface velocity T-points) 
@@ -55,7 +55,7 @@ read_bluelink(varname = "ocean_temp")
 #> class       : SpatRaster 
 #> dimensions  : 1500, 3600, 1  (nrow, ncol, nlyr)
 #> resolution  : 0.1, 0.1  (x, y)
-#> extent      : -9.507305e-10, 360, -75, 75  (xmin, xmax, ymin, ymax)
+#> extent      : 0, 360, -75, 75  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=longlat +datum=WGS84 +no_defs 
 #> source      : ocean_temp_1993_01.nc:temp 
 #> varname     : temp (Potential temperature) 
@@ -70,12 +70,12 @@ read_bluelink("2023-12-31", varname = "ocean_temp")
 #> class       : SpatRaster 
 #> dimensions  : 1500, 3600, 1  (nrow, ncol, nlyr)
 #> resolution  : 0.1, 0.1  (x, y)
-#> extent      : -9.507305e-10, 360, -75, 75  (xmin, xmax, ymin, ymax)
+#> extent      : 0, 360, -75, 75  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=longlat +datum=WGS84 +no_defs 
 #> source      : ocean_temp_2023_12.nc:temp 
 #> varname     : temp (Potential temperature) 
-#> name        : temp_st_ocean=2.5_Time=16435.5 
-#> unit        :                      degrees C
+#> name        : temp_st_ocean=373.1943359375_Time=16405.5 
+#> unit        :                                 degrees C
 ```
 
 Generally, take the year you are in and you should be able to get days
