@@ -33,15 +33,20 @@
 # c("ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
 #   "ocean_u", "ocean_v", "ocean_w")
 
-.do_windows <- function(x) {
+.do_raster <- function(x, band,  depth) {
   requireNamespace("ncdf4", quietly = TRUE);
-  raster::brick(.bluelink_dods(x))
+  terra::rast(raster::raster(.bluelink_dods(x), band = band, level = depth) * 1)
 }
-.generate_raster <- function(x, varname) {
+.do_terra <- function(x, band, depth) {
+  idx <- (depth-1) * 51 + band
+
+  terra::rast(.bluelink_fileserver(x), vsi = TRUE)[[idx]]
+}
+.generate_raster <- function(x, varname, band, depth) {
   bgn <- .bluelink_generator(x, varname = varname)
   switch(.Platform$OS.type,
-    unix =   terra::rast(.bluelink_fileserver(bgn), vsi = TRUE),
-    windows = .do_windows(bgn))
+    unix =   .do_terra(bgn, band, depth),
+    windows = .do_raster(bgn, band, depth))
 
 }
 
@@ -57,24 +62,8 @@
 #' b <- read_mld("2023-12-31")
 #' ex <- terra::ext(14, 200, -70, -40)
 #' #terra::crop(a, ex) - terra::crop(b, ex)
-read_mld <- function(x) {
-  mindate <- as.Date("1993-01-01")
-  if (missing(x)) x <- mindate
-  x <- as.Date(x)[1]
-
-
-
-  obj <- .generate_raster(x, varname = "ocean_mld")
-  if (inherits(obj, "BasicRaster")) {
-    stopifnot(raster::nlayers(obj) == lubridate::days_in_month(x[1]))
-    out <- terra::rast(obj[[as.integer(format(x, "%d"))]] * 1)
-  } else {
-    ## check here
-    stopifnot(terra::nlyr(obj) == lubridate::days_in_month(x[1]))
-    out <- obj[[as.integer(format(x, "%d"))]]
-  }
-
-  out
+read_mld <- function(x, depth = 1L, ...) {
+ read_bluelink(x, varname = "ocean_mld", depth = depth, ...)
 }
 
 
@@ -92,33 +81,19 @@ read_mld <- function(x) {
 #' read_bluelink(varname = "ocean_w")
 #' read_bluelink("2023-01-05", "ocean_salt")
 read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
-                                     "ocean_u", "ocean_v", "ocean_w"), depth = 1L) {
+                                     "ocean_u", "ocean_v", "ocean_w", "ocean_mld"), depth = 1L) {
   mindate <- as.Date("1993-01-01")
   varname <- match.arg(varname)
   if (varname == "ocean_w") mindate <- as.Date("1998-01-01") ## FIXME: I don't know why
+  if (varname == "ocean_mld") depth <- 1L  ##FIXME: warn/message on this
 
   if (missing(x)) x <- mindate
   x <- as.Date(x)[1]
   depth <- depth[1L]
+  band <- as.integer(format(x, "%d"))
+
   if (length(depth) < 1 || depth < 1 || depth > 51 || is.na(depth)) stop("only 51 depths available")
 
-
-  intday <- as.integer(format(x, "%d"))
-  idx <- (intday-1) * 51 + depth
-
-
-  obj <- .generate_raster(x, varname = varname)
-  required_days <- lubridate::days_in_month(x[1]) * 51
-
-  if (inherits(obj, "BasicRaster")) {
-    stopifnot(raster::nlayers(obj) == required_days)
-    out <- terra::rast(obj[[idx]] * 1)
-  } else {
-    ## check here
-    stopifnot(terra::nlyr(obj) == required_days)
-    out <- obj[[idx]]
-  }
-
-  out
+  .generate_raster(x, varname = varname, band = band,  depth = depth)
 }
 
