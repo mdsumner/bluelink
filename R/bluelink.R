@@ -76,9 +76,10 @@ read_mld <- function(x) {
 
 #' Title
 #'
+#' The 'depth' argument is from 1 to 51.
 #' @param x date or datetime object or string
 #' @param varname variable name one of "ocean_<s>" salt, temp, u, v, w  (being salt=salinity, temp=temperature, u,v,w= velocity components in x,y,z direction)
-#' @param depth
+#' @param depth depth level (there are 51, from the surface to the bottom) see Details
 #'
 #' @return SpatRaster
 #' @export
@@ -103,12 +104,14 @@ read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
 
 
   obj <- .generate_raster(x, varname = varname)
+  required_days <- lubridate::days_in_month(x[1]) * 51
+
   if (inherits(obj, "BasicRaster")) {
-    stopifnot(raster::nlayers(obj) == lubridate::days_in_month(x[1]))
+    stopifnot(raster::nlayers(obj) == required_days)
     out <- terra::rast(obj[[idx]] * 1)
   } else {
     ## check here
-    stopifnot(terra::nlyr(obj) == lubridate::days_in_month(x[1]))
+    stopifnot(terra::nlyr(obj) == required_days)
     out <- obj[[idx]]
   }
 

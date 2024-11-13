@@ -15,13 +15,13 @@ read_bluelink(
 
 \item{varname}{variable name one of "ocean_\if{html}{\out{<s>}}" salt, temp, u, v, w  (being salt=salinity, temp=temperature, u,v,w= velocity components in x,y,z direction)}
 
-\item{depth}{}
+\item{depth}{depth level (there are 51, from the surface to the bottom) see Details}
 }
 \value{
 SpatRaster
 }
 \description{
-Title
+The 'depth' argument is from 1 to 51.
 }
 \examples{
 read_bluelink(varname = "ocean_w")
