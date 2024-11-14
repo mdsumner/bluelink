@@ -1,6 +1,6 @@
 Package: bluelink
 Title: Get Ocean Model Output as Raster Objects from 'Bluelink ReANalysis' ('BRAN') 
-Version: 0.2.0
+Version: 0.2.0.9001
 Authors@R: 
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
 Description: Functions to obtain 'Bluelink Reanalysis' ('BRAN2020') a 4 dimensional 
@@ -17,7 +17,8 @@ URL: https://github.com/mdsumner/bluelink, https://research.csiro.au/bluelink/gl
 BugReports: https://github.com/mdsumner/bluelink/issues
 Imports: 
     raster,
-    terra
+    terra,
+    tidync
 Suggests: 
     curl,
     ncdf4,
