@@ -19,12 +19,12 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/mdsumner/bluelink/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mdsumner/bluelink/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of bluelink is to provide access to the Bluelink Reanalysis (BRAN2020) via NetCDF sources. 
+The goal of bluelink is to provide access to the Bluelink Reanalysis (BRAN2023) via NetCDF sources. 
 
 
 ## Bluelink is 
 
-BRAN2020, a 4 dimensional nearly-global ocean product organized by 
+BRAN2023, a 4 dimensional nearly-global ocean product organized by 
  monthly files at 0.1 degree resolution with 51 depth levels ('3600x1500x51x<days>'). 
  The goal of BRAN is to provide a realistic quantitative description of the 
  three-dimensional time-varying ocean circulation of all physical variables 
@@ -68,7 +68,7 @@ Generally, take the year you are in and you should be able to get days from last
 Every day on the first of September
 
 ```{r time}
-dts <- seq(as.Date("1993-10-10"), as.Date("2023-10-10"), by = "1 year")
+dts <- seq(as.Date("2010-01-01"), as.Date("2023-10-10"), by = "1 year")
 
 options(parallelly.fork.enable = TRUE, future.rng.onMisuse = "ignore")
 library(furrr); plan(multicore)

@@ -22,12 +22,18 @@
                                annual = .make_annual(varname, date))
 }
 
+.fibrebase <- function(source, version = NULL) {
+  if (is.null(version)) {
+    version <- getOption("bluelink.BRANVERSION")
+  }
+  sprintf("https://thredds.nci.org.au/thredds/%s/gb6/BRAN/%s", source, version)
+}
 .bluelink_fileserver <- function(x) {
-  sprintf("https://thredds.nci.org.au/thredds/fileServer/gb6/BRAN/BRAN2020/%s", x)
+  sprintf("%s/%s", .fibrebase("fileServer"), x)
 }
 
 .bluelink_dods <- function(x) {
-  sprintf("https://thredds.nci.org.au/thredds/dodsC/gb6/BRAN/BRAN2020/%s", x)
+  sprintf("%s/%s", .fibrebase("dodsC"), x)
 }
 
 # c("ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
@@ -127,9 +133,14 @@ read_mld <- function(x,  ...) {
 #' }
 read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
                                      "ocean_u", "ocean_v", "ocean_w", "ocean_mld"), level = 1L, ...) {
-  mindate <- as.Date("1993-01-01")
+  mindate <- as.Date("2010-01-01")
+  ## WIP we need to handle different start and end date availability for older stuff
+  if (getOption("bluelink.BRANVERSION") == "BRAN2020") {
+    mindate <- "1993-01-01"
+    if (varname == "ocean_w") mindate <- as.Date("1998-01-01")
+  }
   varname <- match.arg(varname)
-  if (varname == "ocean_w") mindate <- as.Date("1998-01-01") ## FIXME: I don't know why
+
   if (varname %in% c("ocean_mld")) level <- 1L  ##FIXME: warn/message on this
 
   if (missing(x)) x <- mindate

@@ -1,11 +1,11 @@
 Package: bluelink
 Title: Get Ocean Model Output as Raster Objects from 'Bluelink ReANalysis' ('BRAN') 
-Version: 0.2.0.9002
+Version: 0.2.0.9003
 Authors@R: 
    c( person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre")), 
       person("Dale", "Maschette", role = "ctb"))
-Description: Functions to obtain 'Bluelink Reanalysis' ('BRAN2020') a 4 dimensional 
- nearly global ocean product.  The goal of 'BRAN' is to provide a realistic quantitative 
+Description: Functions to obtain 'Bluelink Reanalysis' ('BRAN2023' currently, starts in 2010) 
+ a 4 dimensional  nearly global ocean product.  The goal of 'BRAN' is to provide a realistic quantitative 
  description of the three-dimensional time-varying ocean circulation of all physical 
  variables for the last few decades including temperature, salinity, sea-level and 
  three components of velocity. 
