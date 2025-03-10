@@ -139,11 +139,16 @@ read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
     mindate <- "1993-01-01"
     if (varname == "ocean_w") mindate <- as.Date("1998-01-01")
   }
+  if (missing(x)) x <- mindate
+  if (x < as.Date("2010-01-01") && getOption("bluelink.BRANVERSION") == "BRAN2023") {
+    options("bluelink.BRANVERSION" = "BRAN2020")
+    on.exit(Sys.setenv("bluelink.BRANVERSION" = "BRAN2023"))
+  }
   varname <- match.arg(varname)
 
   if (varname %in% c("ocean_mld")) level <- 1L  ##FIXME: warn/message on this
 
-  if (missing(x)) x <- mindate
+
   x <- as.Date(x)[1]
   level <- level[1L]
   band <- as.integer(format(x, "%d"))
