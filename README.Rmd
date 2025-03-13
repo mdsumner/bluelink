@@ -62,6 +62,80 @@ read_bluelink("2023-12-31", varname = "ocean_temp")
 
 Generally, take the year you are in and you should be able to get days from last year. 
 
+## Get just the url for use in GDAL
+
+```{r gdal}
+bluelink_dsn()
+
+bluelink_dsn("2003-02-01", varname = "ocean_salt")
+
+```
+
+Substitute "/fileServer" for "/dodsC/" for use in netcdf or tidync, and turn off "vsicurl". 
+
+```R
+u <- bluelink_dsn("2003-02-01", varname = "ocean_salt", vsicurl = FALSE)
+dods <- gsub("fileServer", "dodsC", u)
+RNetCDF::print.nc(RNetCDF::open.nc(dods))
+
+netcdf classic {
+dimensions:
+	Time = UNLIMITED ; // (28 currently)
+	nv = 2 ;
+	st_edges_ocean = 52 ;
+	st_ocean = 51 ;
+	xt_ocean = 3600 ;
+	yt_ocean = 1500 ;
+variables:
+	NC_DOUBLE xt_ocean(xt_ocean) ;
+		NC_CHAR xt_ocean:long_name = "tcell longitude" ;
+		NC_CHAR xt_ocean:units = "degrees_E" ;
+		NC_CHAR xt_ocean:cartesian_axis = "X" ;
+		NC_INT xt_ocean:domain_decomposition = 1, 3600, 1, 1800 ;
+		NC_INT xt_ocean:_ChunkSizes = 300 ;
+	NC_DOUBLE yt_ocean(yt_ocean) ;
+		NC_CHAR yt_ocean:long_name = "tcell latitude" ;
+		NC_CHAR yt_ocean:units = "degrees_N" ;
+		NC_CHAR yt_ocean:cartesian_axis = "Y" ;
+		NC_INT yt_ocean:domain_decomposition = 1, 1500, 1, 150 ;
+		NC_INT yt_ocean:_ChunkSizes = 300 ;
+	NC_DOUBLE st_ocean(st_ocean) ;
+		NC_CHAR st_ocean:long_name = "tcell
+<snip>		
+		
+tidync::tidync(dods)
+
+Data Source (1): ocean_salt_2003_02.nc ...
+
+Grids (8) <dimension family> : <associated variables> 
+
+[1]   D4,D5,D3,D0 : salt    **ACTIVE GRID** ( 7711200000  values per variable)
+[2]   D1,D0       : Time_bounds
+[3]   D0          : Time, average_T1, average_T2, average_DT
+[4]   D1          : nv
+[5]   D2          : st_edges_ocean
+[6]   D3          : st_ocean
+[7]   D4          : xt_ocean
+[8]   D5          : yt_ocean
+
+Dimensions 6 (4 active): 
+  
+  dim   name     length       min    max start count      dmin   dmax unlim coord_dim 
+  <chr> <chr>     <dbl>     <dbl>  <dbl> <int> <int>     <dbl>  <dbl> <lgl> <lgl>     
+1 D0    Time         28 8798.     8824.      1    28 8798.     8824.  TRUE  TRUE      
+2 D3    st_ocean     51    2.5    4509.      1    51    2.5    4509.  FALSE TRUE      
+3 D4    xt_ocean   3600    0.0500  360.      1  3600    0.0500  360.  FALSE TRUE      
+4 D5    yt_ocean   1500  -74.9      74.9     1  1500  -74.9      74.9 FALSE TRUE      
+  
+Inactive dimensions:
+  
+  dim   name           length   min   max unlim coord_dim 
+  <chr> <chr>           <dbl> <dbl> <dbl> <lgl> <lgl>     
+1 D1    nv                  2     1     2 FALSE TRUE      
+2 D2    st_edges_ocean     52     0  5000 FALSE TRUE 
+
+
+```
 
 ## Try a time series
 

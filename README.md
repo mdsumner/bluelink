@@ -9,11 +9,11 @@
 <!-- badges: end -->
 
 The goal of bluelink is to provide access to the Bluelink Reanalysis
-(BRAN2020) via NetCDF sources.
+(BRAN2023) via NetCDF sources.
 
 ## Bluelink is
 
-BRAN2020, a 4 dimensional nearly-global ocean product organized by
+BRAN2023, a 4 dimensional nearly-global ocean product organized by
 monthly files at 0.1 degree resolution with 51 depth levels
 (‘3600x1500x51x<days>’). The goal of BRAN is to provide a realistic
 quantitative description of the three-dimensional time-varying ocean
@@ -84,6 +84,82 @@ read_bluelink("2023-12-31", varname = "ocean_temp")
 Generally, take the year you are in and you should be able to get days
 from last year.
 
+## Get just the url for use in GDAL
+
+``` r
+bluelink_dsn()
+#> [1] "/vsicurl/https://thredds.nci.org.au/thredds/fileServer/gb6/BRAN/BRAN2023/daily/atm_flux_diag_2024_06.nc"
+
+bluelink_dsn("2003-02-01", varname = "ocean_salt")
+#> [1] "/vsicurl/https://thredds.nci.org.au/thredds/fileServer/gb6/BRAN/BRAN2020/daily/ocean_salt_2003_02.nc"
+```
+
+Substitute “/fileServer” for “/dodsC/” for use in netcdf or tidync, and
+turn off “vsicurl”.
+
+``` r
+u <- bluelink_dsn("2003-02-01", varname = "ocean_salt", vsicurl = FALSE)
+dods <- gsub("fileServer", "dodsC", u)
+RNetCDF::print.nc(RNetCDF::open.nc(dods))
+
+netcdf classic {
+dimensions:
+    Time = UNLIMITED ; // (28 currently)
+    nv = 2 ;
+    st_edges_ocean = 52 ;
+    st_ocean = 51 ;
+    xt_ocean = 3600 ;
+    yt_ocean = 1500 ;
+variables:
+    NC_DOUBLE xt_ocean(xt_ocean) ;
+        NC_CHAR xt_ocean:long_name = "tcell longitude" ;
+        NC_CHAR xt_ocean:units = "degrees_E" ;
+        NC_CHAR xt_ocean:cartesian_axis = "X" ;
+        NC_INT xt_ocean:domain_decomposition = 1, 3600, 1, 1800 ;
+        NC_INT xt_ocean:_ChunkSizes = 300 ;
+    NC_DOUBLE yt_ocean(yt_ocean) ;
+        NC_CHAR yt_ocean:long_name = "tcell latitude" ;
+        NC_CHAR yt_ocean:units = "degrees_N" ;
+        NC_CHAR yt_ocean:cartesian_axis = "Y" ;
+        NC_INT yt_ocean:domain_decomposition = 1, 1500, 1, 150 ;
+        NC_INT yt_ocean:_ChunkSizes = 300 ;
+    NC_DOUBLE st_ocean(st_ocean) ;
+        NC_CHAR st_ocean:long_name = "tcell
+<snip>      
+        
+tidync::tidync(dods)
+
+Data Source (1): ocean_salt_2003_02.nc ...
+
+Grids (8) <dimension family> : <associated variables> 
+
+[1]   D4,D5,D3,D0 : salt    **ACTIVE GRID** ( 7711200000  values per variable)
+[2]   D1,D0       : Time_bounds
+[3]   D0          : Time, average_T1, average_T2, average_DT
+[4]   D1          : nv
+[5]   D2          : st_edges_ocean
+[6]   D3          : st_ocean
+[7]   D4          : xt_ocean
+[8]   D5          : yt_ocean
+
+Dimensions 6 (4 active): 
+  
+  dim   name     length       min    max start count      dmin   dmax unlim coord_dim 
+  <chr> <chr>     <dbl>     <dbl>  <dbl> <int> <int>     <dbl>  <dbl> <lgl> <lgl>     
+1 D0    Time         28 8798.     8824.      1    28 8798.     8824.  TRUE  TRUE      
+2 D3    st_ocean     51    2.5    4509.      1    51    2.5    4509.  FALSE TRUE      
+3 D4    xt_ocean   3600    0.0500  360.      1  3600    0.0500  360.  FALSE TRUE      
+4 D5    yt_ocean   1500  -74.9      74.9     1  1500  -74.9      74.9 FALSE TRUE      
+  
+Inactive dimensions:
+  
+  dim   name           length   min   max unlim coord_dim 
+  <chr> <chr>           <dbl> <dbl> <dbl> <lgl> <lgl>     
+1 D1    nv                  2     1     2 FALSE TRUE      
+2 D2    st_edges_ocean     52     0  5000 FALSE TRUE 
+
+```
+
 ## Try a time series
 
 Every day on the first of September
@@ -94,8 +170,6 @@ dts <- seq(as.Date("2010-01-01"), as.Date("2023-10-10"), by = "1 year")
 options(parallelly.fork.enable = TRUE, future.rng.onMisuse = "ignore")
 library(furrr); plan(multicore)
 #> Loading required package: future
-#> Warning in getCGroupsRoot(controller = controller): Mixed CGroups versions are
-#> not supported: 'cgroup2', 'cgroup'
 
 sst <- future_map_dbl(dts, \(.x) terra::extract(read_bluelink(.x, varname = "ocean_temp"), cbind(150, -42))[[1]])
 plan(sequential)

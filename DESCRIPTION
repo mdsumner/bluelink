@@ -1,6 +1,6 @@
 Package: bluelink
 Title: Get Ocean Model Output as Raster Objects from 'Bluelink ReANalysis' ('BRAN') 
-Version: 0.2.0.9003
+Version: 0.2.0.9004
 Authors@R: 
    c( person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre")), 
       person("Dale", "Maschette", role = "ctb"))

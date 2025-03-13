@@ -59,6 +59,36 @@
   terra::crs(out) <- "EPSG:4326"
   out
 }
+
+
+#' Generate a description of a bluelink file for GDAL
+#'
+#' @param x date string or date(time) format
+#' @param varname name of variable (that identifies the file)
+#' @param vsicurl include the prefix (default TRUE)
+#' @return string to a thredds file that GDAL can open
+#' @export
+#'
+#' @examples
+#' bluelink_dsn()
+#' bluelink_dsn("2020-01-01", varname = "ocean_u")
+#' bluelink_dsn("1993-01-01")
+bluelink_dsn <- function(x, varname = c("atm_flux_diag", "ice_force", "ocean_eta_t", "ocean_force",
+                                         "ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
+                                         "ocean_ty_trans_int_z", "ocean_u", "ocean_v", "ocean_w"), vsicurl = TRUE) {
+  if (missing(x)) x <- "2024-06-30"
+
+  if (as.Date(x) < as.Date("2010-01-01") && getOption("bluelink.BRANVERSION") == "BRAN2023") {
+    options("bluelink.BRANVERSION" = "BRAN2020")
+    on.exit(Sys.setenv("bluelink.BRANVERSION" = "BRAN2023"))
+  }
+  bgn <- .bluelink_generator(x, varname = varname)
+  out <- .bluelink_fileserver(bgn)
+  if (vsicurl) {
+    out <- sprintf("/vsicurl/%s", out)
+  }
+  out
+}
 .do_terra <- function(x, band, level) {
 
   dsn <- .bluelink_fileserver(x)
