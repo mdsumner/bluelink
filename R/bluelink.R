@@ -22,11 +22,8 @@
                                annual = .make_annual(varname, date))
 }
 
-.fibrebase <- function(source, version = NULL) {
-  if (is.null(version)) {
-    version <- getOption("bluelink.BRANVERSION")
-  }
-  sprintf("https://thredds.nci.org.au/thredds/%s/gb6/BRAN/%s", source, version)
+.fibrebase <- function(source) {
+  paste0(sprintf("https://thredds.nci.org.au/thredds/%s/gb6/BRAN", source), "/%s")
 }
 .bluelink_fileserver <- function(x) {
   sprintf("%s/%s", .fibrebase("fileServer"), x)
@@ -43,6 +40,7 @@
 .do_raster <- function(x, band,  level) {
   requireNamespace("ncdf4", quietly = TRUE);
   dsn <- .bluelink_dods(x)
+
   ht <- suppressMessages(tidync::hyper_transforms(tidync::tidync(dsn)))
   out <- terra::rast(raster::raster(dsn, band = band, level = level) * 1)
 
@@ -76,14 +74,15 @@
 bluelink_dsn <- function(x, varname = c("atm_flux_diag", "ice_force", "ocean_eta_t", "ocean_force",
                                          "ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
                                          "ocean_ty_trans_int_z", "ocean_u", "ocean_v", "ocean_w"), vsicurl = TRUE) {
-  if (missing(x)) x <- "2024-06-30"
+  if (missing(x)) x <- "2024-06-30"  ## FIXME we need a way to find out the latest
 
-  if (as.Date(x) < as.Date("2010-01-01") && getOption("bluelink.BRANVERSION") == "BRAN2023") {
-    options("bluelink.BRANVERSION" = "BRAN2020")
-    on.exit(Sys.setenv("bluelink.BRANVERSION" = "BRAN2023"))
+  BRANVERSION <- "BRAN2023"
+  if (as.Date(x) < as.Date("2010-01-01")) {
+    BRANVERSION <- "BRAN2020"
   }
   bgn <- .bluelink_generator(x, varname = varname)
   out <- .bluelink_fileserver(bgn)
+  out <- sprintf(out, BRANVERSION)
   if (vsicurl) {
     out <- sprintf("/vsicurl/%s", out)
   }
@@ -114,6 +113,11 @@ bluelink_dsn <- function(x, varname = c("atm_flux_diag", "ice_force", "ocean_eta
 }
 .generate_raster <- function(x, varname, band, level) {
   bgn <- .bluelink_generator(x, varname = varname)
+  BRANVERSION <- "BRAN2023"
+  if (as.Date(x) < as.Date("2010-01-01")) {
+    BRANVERSION <- "BRAN2020"
+  }
+  bgn <- sprintf(bgn, BRANVERSION)
   switch(.Platform$OS.type,
     unix =   .do_terra(bgn, band, level),
     windows = .do_raster(bgn, band, level))
@@ -164,16 +168,9 @@ read_mld <- function(x,  ...) {
 read_bluelink <- function(x, varname = c("ocean_salt", "ocean_temp",
                                      "ocean_u", "ocean_v", "ocean_w", "ocean_mld"), level = 1L, ...) {
   mindate <- as.Date("2010-01-01")
-  ## WIP we need to handle different start and end date availability for older stuff
-  if (getOption("bluelink.BRANVERSION") == "BRAN2020") {
-    mindate <- "1993-01-01"
-    if (varname == "ocean_w") mindate <- as.Date("1998-01-01")
-  }
+
   if (missing(x)) x <- mindate
-  if (x < as.Date("2010-01-01") && getOption("bluelink.BRANVERSION") == "BRAN2023") {
-    options("bluelink.BRANVERSION" = "BRAN2020")
-    on.exit(Sys.setenv("bluelink.BRANVERSION" = "BRAN2023"))
-  }
+
   varname <- match.arg(varname)
 
   if (varname %in% c("ocean_mld")) level <- 1L  ##FIXME: warn/message on this

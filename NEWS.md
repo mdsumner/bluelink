@@ -1,5 +1,7 @@
 # bluelink (development version)
 
+* All known useable files published in a Parquet table in inst/vzarr. 
+
 * New function `bluelink_dsn()` to give a GDAL readable file url. 
 
 * Changed default to BRAN2023 (so only starts in 2010). Backwards usage is possible but not finished. 
