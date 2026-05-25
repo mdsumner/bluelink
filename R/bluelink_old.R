@@ -26,11 +26,11 @@
   paste0(sprintf("https://thredds.nci.org.au/thredds/%s/gb6/BRAN", source), "/%s")
 }
 .bluelink_fileserver <- function(x) {
-  sprintf("%s/%s", .fibrebase("fileServer"), x)
+  sprintf(.fibrebase("fileServer"), x)
 }
 
 .bluelink_dods <- function(x) {
-  sprintf("%s/%s", .fibrebase("dodsC"), x)
+  sprintf(.fibrebase("dodsC"), x)
 }
 
 # c("ocean_mld", "ocean_salt", "ocean_temp", "ocean_tx_trans_int_z",
@@ -124,21 +124,7 @@ bluelink_dsn <- function(x, varname = c("atm_flux_diag", "ice_force", "ocean_eta
 
 }
 
-#' Read Mixed Layer Depth
-#'
-#' @param x date or datetime object or string
-#' @param ... passed to [read_bluelink()]
-#' @return SpatRaster
-#' @export
-#'
-#' @examples
-#' a <- read_mld()
-#' b <- read_mld("2023-12-31")
-#' ex <- terra::ext(14, 200, -70, -40)
-#' #terra::crop(a, ex) - terra::crop(b, ex)
-read_mld <- function(x,  ...) {
- read_bluelink(x, varname = "ocean_mld", level = 1L, ...)
-}
+
 
 
 #' Title

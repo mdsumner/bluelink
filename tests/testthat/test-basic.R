@@ -13,7 +13,7 @@ test_that("access works", {
   expect_true(min(v) > 12)
   expect_true(max(v) > 19)
 
-  expect_true(terra::extract(r, cbind(147, -48)) <
+  expect_true(terra::extract(r, cbind(147, -48)) >
   terra::extract(r2, cbind(147, -48)))
 
   r <- read_bluelink(varname = "ocean_temp")

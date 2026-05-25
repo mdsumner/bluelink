@@ -1,4 +1,6 @@
-# bluelink (development version)
+# bluelink 0.3.0
+
+* Refactor and added cloud-config for terra read. 
 
 * All known useable files published in a Parquet table in inst/vzarr. 
 
