@@ -89,7 +89,7 @@ read_bluelink <- function(date,
 
   band <- as.integer(format(date, "%d"))
 
-  if (.Platform$OS.type == "windows") {
+  if (.Platform$OS.type == "windows" || Sys.info()[["sysname"]] == "Darwin") {
     dsn <- bluelink_uri(date, varname, access = "dodsC")
     out <- .do_raster(dsn, band, level)
   } else {
